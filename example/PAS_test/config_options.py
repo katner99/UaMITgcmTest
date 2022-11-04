@@ -1,7 +1,7 @@
 
 ###### 1. Server workflow options ######
 
-expt_name = 'PAS_999'
+expt_name = 'PAS_test'
 use_xmitgcm = True
 save_dumps = False
 save_tmp_ckpt = False
@@ -13,14 +13,14 @@ output_dir = work_dir+'output/'
 
 budget_code = 'n02-NES011994'
 
-rsync_output = True
-rsync_host = 'kaight@bslcenb.nerc-bas.ac.uk'
-rsync_path = '/data/oceans_output/shelf/kaight/archer2_mitgcm/'
+#rsync_output = True
+#rsync_host = 'kaight@bslcenb.nerc-bas.ac.uk'
+#rsync_path = '/data/oceans_output/shelf/kaight/archer2_mitgcm/'
 
 ###### 2. Coupling options ######
 
 total_time = 12*211
-spinup_time = 12*116
+spinup_time = 12*211
 couple_step = 12
 
 melt_coupling = 'avg'
