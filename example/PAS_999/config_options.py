@@ -6,7 +6,7 @@ use_xmitgcm = True
 save_dumps = False
 save_tmp_ckpt = False
 
-work_dir = '/work/n02/n02/kaight/UaMITgcm/example/'+expt_name+'/'
+work_dir = '/work/n02/n02/katner33/UaMITgcm/example/'+expt_name+'/'
 mit_case_dir = work_dir+'mitgcm_run/'
 ua_exe_dir = work_dir+'ua_run/'
 output_dir = work_dir+'output/'
