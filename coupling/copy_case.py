@@ -33,7 +33,8 @@ def do_copy_case (old_name, new_name, check_restart=True):
 
     # Add the existing configuration to the path so we can read config_options.py
     sys.path.insert(0, './'+old_dir)
-    from set_parameters import Options
+
+    from set_parameters import Options    
     options = Options()
 
     # Paths to subdirectories
