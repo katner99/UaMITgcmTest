@@ -34,7 +34,7 @@ PAS_IN=/work/n02/n02/shared/baspog/PAS_files/
 ln -s $PAS_IN/* .
 LENS_ATM=/work/n02/n02/shared/baspog/CESM/LENS
 ln -s $LENS_ATM/* .
-LENS_OBCS=/work/n02/n02/shared/baspog/CESM/LENS_obcs
+LENS_OBCS=/work/n02/n02/shared/baspog/CESM/PAS_obcs/LENS_obcs
 ln -s $LENS_OBCS/* .
 ../scripts/dummy_link.sh LENS 1890 1919 1920 1949
 ../scripts/dummy_link.sh LENS 1889 1889 1890 1890
