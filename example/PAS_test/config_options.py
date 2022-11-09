@@ -2,7 +2,7 @@
 ###### 1. Server workflow options ######
 
 expt_name = 'PAS_test'
-use_xmitgcm = True
+use_xmitgcm = False
 save_dumps = False
 save_tmp_ckpt = False
 
@@ -13,7 +13,7 @@ output_dir = work_dir+'output/'
 
 budget_code = 'n02-NES011994'
 
-#rsync_output = True
+rsync_output = False
 #rsync_host = 'kaight@bslcenb.nerc-bas.ac.uk'
 #rsync_path = '/data/oceans_output/shelf/kaight/archer2_mitgcm/'
 
