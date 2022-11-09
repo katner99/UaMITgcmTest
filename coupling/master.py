@@ -63,7 +63,7 @@ if __name__ == "__main__":
             print('Converting MITgcm binary output to NetCDF')
             convert_mit_output(options)
 
-        print('Gathering output')
+        print('Gathering output A!!')
         gather_output(options)
 
         if options.correct_obcs_online:
