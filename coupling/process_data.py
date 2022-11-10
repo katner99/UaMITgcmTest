@@ -482,7 +482,7 @@ def gather_output (options):
         move_to_dir(fname, directory, new_mit_dir)
 
     if options.use_xmitgcm:
-        # Move the NetCDF files created by convert_mit_output into the new folder
+       # Move the NetCDF files created by convert_mit_output into the new folder
         if options.save_dumps:
             check_and_move(options.mit_run_dir, options.dump_start_nc_name)
             check_and_move(options.mit_run_dir, options.dump_end_nc_name)
