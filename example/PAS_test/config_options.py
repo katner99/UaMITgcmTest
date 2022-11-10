@@ -32,8 +32,8 @@ digging = 'bathy'
 filling = True
 adjust_vel = True
 
-preserve_open_ocean_bathy = True
-preserve_static_ice = True
+preserve_open_ocean_bathy = False
+preserve_static_ice = False
 
 pload_option = 'constant'
 pload_temp = 1.
