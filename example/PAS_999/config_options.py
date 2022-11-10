@@ -2,7 +2,7 @@
 ###### 1. Server workflow options ######
 
 expt_name = 'PAS_999'
-use_xmitgcm = True
+use_xmitgcm = False
 save_dumps = False
 save_tmp_ckpt = False
 
@@ -13,7 +13,7 @@ output_dir = work_dir+'output/'
 
 budget_code = 'n02-NES011994'
 
-#rsync_output = True
+rsync_output = False
 #rsync_host = 'kaight@bslcenb.nerc-bas.ac.uk'
 #rsync_path = '/data/oceans_output/shelf/kaight/archer2_mitgcm/'
 
@@ -32,8 +32,8 @@ digging = 'bathy'
 filling = True
 adjust_vel = True
 
-preserve_open_ocean_bathy = True
-preserve_static_ice = True
+preserve_open_ocean_bathy = False
+preserve_static_ice = False
 
 pload_option = 'constant'
 pload_temp = 1.
