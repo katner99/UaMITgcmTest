@@ -1,9 +1,3 @@
-[submodule "tools/mitgcm_python"]
-	path = tools/mitgcm_python
-	url = https://github.com/knaughten/mitgcm_python.git
-[submodule "tools/xmitgcm"]
-	path = tools/xmitgcm
-	url = https://github.com/xgcm/xmitgcm.git
 [submodule "MITgcm_67k"]
 	path = MITgcm_67k
 	url = git@github.com:MITgcm/MITgcm.git
@@ -20,3 +14,10 @@
 [submodule "MITgcm_67s"]
 	path = MITgcm_67s
 	url = git@github.com:MITgcm/MITgcm.git
+[submodule "tools/mitgcm_python"]
+	path = tools/mitgcm_python
+	url = git@github.com:knaughten/mitgcm_python.git
+[submodule "UaSource_7Dec2021"]
+	path = UaSource_7Dec2021
+	url = git@github.com:GHilmarG/UaSource.git
+	branch = master

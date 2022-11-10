@@ -24,6 +24,8 @@ use_xmitgcm = False
 # If use_xmitgcm is False, you can just switch off dumpInitAndLast instead,
 # unless you have restart_type='zero'.
 save_dumps = True
+# Whether to save temporary checkpoints (eg pickup.ckptA.data)
+save_tmp_ckpt = True
 
 # Format for Ua output
 # For now the only option is 'matlab', later 'netcdf' will be added
@@ -121,6 +123,9 @@ output_freq = 'monthly'
 ### 'bathy': dig bathymetry which is too shallow
 ### 'draft': dig ice shelf drafts which are too deep
 digging = 'bathy'
+### Should we dig full cells instead of the minimum amount
+### (needed to match PAS domain generation)?
+dig_full_cells = False
 ### Should we fill isolated single bottom cells to prevent pooling
 ### of dense water?
 ### This is a really good thing to do, but you also need to have it
@@ -133,6 +138,8 @@ adjust_vel = True
 
 ### Is this a MISOMIP domain that needs a wall built at the north and south boundaries?
 misomip_wall = False
+### Flag to preserve the MITgcm bathymetry everywhere outside the Ua domain (i.e. the open ocean)
+preserve_open_ocean_bathy = False
 ### Flag to preserve the MITgcm land mask in regions outside the Ua domain. 
 preserve_ocean_mask = False
 ### Flag to allow static ice shelves in regions outside the Ua domain.
@@ -157,18 +164,16 @@ pload_salt = 34.2
 ua_ini_restart = False
 
 ### Do you want the coupler to adjust the incoming OBCS velocities such that
-### the volume of the domain is approximately conserved on an annual basis?
-### If so, couple_step must be a multiple of 12 (so the seasonal cycle is
-### preserved). The code could be edited to remove this requirement, if needed.
+### the volume of the domain is approximately conserved?
 correct_obcs_online = False
 ### Are the OBCS transient (one file per year) or a monthly climatology
 ### (the same yearly file over and over)?
 ### If False, you must make a copy of each OBCS file with the suffix ".master"
 ### so that a new correction can be applied each year.
 obcs_transient = True
-### How many years to average over for the OBCS corrections?
-### Can set 0 to average over all years in the simulation.
-correct_obcs_years = 1
+### How many coupling steps to average over for the OBCS corrections?
+### Must set this up so it averages over a multiple of 12 months.
+correct_obcs_steps = 1
 ### Threshold of acceptable SSH anomaly before OBCS corrections are triggered
 ### (absolute value, in metres)
 obcs_threshold = 0
@@ -218,6 +223,10 @@ seaice_nz = 7
 ### Otherwise set it to whatever you want!
 startDate = '20000101'
 
+### Does the ocean use the addMass package?
+use_addmass = False
+### Does the sea ice use sigma terms? (Check in pickup_seaice.*.meta)
+seaice_sigma = True
 
 
 ###### 4. Filenames ######
@@ -232,7 +241,7 @@ calendar_file = 'calendar'
 ### Name of file that is created when simulation successfully finishes
 finished_file = 'finished'
 
-### Name of log file for sea surface height. Only used if correct_obcs_online=True and correct_obcs_years > 1.
+### Name of log file for sea surface height. Only used if correct_obcs_online=True and correct_obcs_steps > 1.
 eta_file = 'eta_log'
 
 ### Bathymetry file read by MITgcm. Should match the value in input/data.

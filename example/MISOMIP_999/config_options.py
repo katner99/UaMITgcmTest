@@ -35,18 +35,24 @@ ua_exe_dir = work_dir+'ua_run/'
 output_dir = work_dir+'output/'
 
 ### Archer budget to charge jobs to
-budget_code = 'n02-FISSA'
+budget_code = 'n02-TiPACCs'
 
 
 ###### 2. Coupling options ######
 
 ### Total length of simulation (months)
-total_time = 24
+total_time = 102*12
 ### Length of ocean spinup period (months)
 spinup_time = 24
 ### Length of coupling timestep (months)
 ### total_time and spinup_time must be evenly divisible by couple_step
 couple_step = 24
+
+### Calculation of melt rates 
+### 'last': Ua sees melt rates from the end of the coupling interval
+### 'avg': Ua sees melt rates averaged over the coupling interval
+### 'all': Ua sees transient melt rates over coupling interval with no averaging
+melt_coupling = 'avg'
 
 ### Restart type for MITgcm. 2 options:
 ### 'zero': MITgcm will start from time 0 every coupling segment.
@@ -112,6 +118,8 @@ ua_ini_restart = True
 
 
 ###### 3. MITgcm parameters ######
+
+coordinates = 'xy'
 
 ### Does your configuration of MITgcm include sea ice?
 use_seaice = False

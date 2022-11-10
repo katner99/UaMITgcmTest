@@ -38,13 +38,13 @@ def clean_ua (directory):
 if __name__ == "__main__":
 
     # Make sure the user didn't call this accidentally
-    out = raw_input('This will delete all existing results if they are not backed up. Are you sure you want to proceed (yes/no)? ').strip()
+    out = input('This will delete all existing results if they are not backed up. Are you sure you want to proceed (yes/no)? ').strip()
     while True:
         if out == 'yes':
             break
         if out == 'no':
             sys.exit()
-        out = raw_input('Please answer yes or no. ').strip()
+        out = input('Please answer yes or no. ').strip()
 
     # Read simulation options so we have directories
     options = Options()
@@ -63,5 +63,5 @@ if __name__ == "__main__":
 
     # Delete some log files if they exist
     for fname in os.listdir('./'):
-        if fname in ['coupler_stdout', 'jobs.log'] or (fname.startswith('run_') and '.sh.o' in fname) or fname.startswith(options.expt_name+'o.o') or fname.startswith(options.expt_name+'i.o'):
+        if fname in ['coupler_stdout', 'jobs.log'] or (fname.startswith('run_') and '.sh.o' in fname) or fname.startswith(options.expt_name+'o.o') or fname.startswith(options.expt_name+'i.o') or (fname.startswith('slurm-') and fname.endswith('.out')):
             os.remove(fname)

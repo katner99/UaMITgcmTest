@@ -1,36 +1,34 @@
-#!/bin/bash --login
-#PBS -l select=1
-#PBS -l walltime=2:00:00
-#PBS -j oe
-#PBS -m n
-#PBS -r n
+#!/bin/bash
+#SBATCH --partition=standard
+#SBATCH --qos=standard
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=24
+#SBATCH --time=2:00:00
+#SBATCH --no-requeue
 ####################################################################
 # Run MITgcm.
-# Must pass the arguments
-# -v MIT_DIR=<path to MITgcm case directory>,ACC=<Archer budget>
-# and
-# -A <Archer budget>
+# Must pass the argument
+# --export=MIT_DIR=<path to MITgcm case directory>
 ####################################################################
 
-cd $PBS_O_WORKDIR
 echo 'MITgcm starts '`date` >> jobs.log
 
 cd $MIT_DIR
 cd run/
+. ../scripts/case_setup
 
-export TMPDIR=/work/n02/n02/`whoami`/SCRATCH
 export OMP_NUM_THREADS=1
 
-aprun -n 24 -N 24 ./mitgcmuv
+srun --distribution=block:block --hint=nomultithread ./mitgcmuv 1>>mitgcm_std.out 2>>mitgcm_err.out
 OUT=$?
 
-cd $PBS_O_WORKDIR
+cd ../../
 if [ $OUT == 0 ]; then
     echo 'MITgcm ends '`date` >> jobs.log
     touch mitgcm_finished
     if [ -e ua_finished ]; then
         # MITgcm was the last one to finish
-	qsub -A $ACC run_coupler.sh
+        sbatch -A $ACC run_coupler.sh
     fi
     exit 0
 else

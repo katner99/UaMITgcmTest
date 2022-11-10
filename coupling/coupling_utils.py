@@ -18,7 +18,7 @@ from mitgcm_python.file_io import write_binary
 # Global variables
 # Dimensions (2D or 3D) of variables in pickup file
 # These files are structured differently so a 2D/3D key is necessary.
-pickup_vars_3d = ['Uvel', 'Vvel', 'Theta', 'Salt', 'GuNm1', 'GvNm1', 'PhiHyd', 'siTICES', 'pTr01']
+pickup_vars_3d = ['Uvel', 'Vvel', 'Theta', 'Salt', 'GuNm1', 'GvNm1', 'PhiHyd', 'siTICES', 'pTr01', 'AddMass']
 pickup_vars_2d = ['EtaN', 'dEtaHdt', 'EtaH', 'siAREA', 'siHEFF', 'siHSNOW', 'siUICE', 'siVICE', 'siSigm1', 'siSigm2', 'siSigm12']
 
 # Extract the first continuous group of digits in a string, including minus signs. Return as an integer.
@@ -165,6 +165,12 @@ def days_between (year_1, month_1, year_2, month_2, calendar_type):
             return num_days
 
 
+# Calculate the number of months between the given dates.
+def months_between (year_1, month_1, year_2, month_2):
+
+    return 12*(year_2 - year_1) + (month_2 - month_1)
+
+
 # As above, but in years (conversion depends on calendar type).
 def years_between (year_1, month_1, year_2, month_2, calendar_type):
 
@@ -289,7 +295,7 @@ def overwrite_pickup (directory, file_head, timestep, fields, var_names, nz):
         sys.exit()
 
     # Now overwrite the file
-    file_path = directory + file_head + '.' + str(timestep).zfill(10) + '.data'
+    file_path = directory + file_head + '.' + str(int(timestep)).zfill(10) + '.data'
     if not os.path.isfile(file_path):
         print('Error (overwrite_pickup): incorrect pickup file path.')
         sys.exit()
@@ -303,7 +309,11 @@ def move_to_dir (fname, old_dir, new_dir):
 
 # Copy a file from one directory to another, without changing its name.
 def copy_to_dir (fname, old_dir, new_dir):
-    shutil.copy(old_dir+fname, new_dir+fname)    
+    try:
+        shutil.copy(old_dir+fname, new_dir+fname)
+    except(shutil.SameFileError):
+        # They are already the same file (probably symlinks)
+        pass
 
 
 # Convert a list of strings to a single string with elements separated by the given separator character.
@@ -315,45 +325,45 @@ def list_with_separator (A, sep):
     return s[:-1]    
 
 
-# Submit the given PBS script and return the PBS job ID.
+# Submit the given SBATCH script and return the PBS job ID.
 # Optional keyword arguments:
 # options: Options object
 # input_var: a list of variable definitions to pass with -v option, eg 'MIT_DIR=directory_path'
-# afterok: a list of PBS job IDs of previously submitted jobs. If it is defined, this job will stay on hold until the given jobs successfully complete.
-def submit_job (options, pbs_script, input_var=None, afterok=None):
+# afterok: a list of SBATCH job IDs of previously submitted jobs. If it is defined, this job will stay on hold until the given jobs successfully complete.
+def submit_job (options, sbatch_script, input_var=None, afterok=None):
 
-    # Construct qsub call line by line.
-    command = 'qsub'
+    # Construct sbatch call line by line.
+    command = 'sbatch'
     # Specify budget
     command += ' -A ' + options.budget_code
     # Specify job name
     jobname = options.expt_name
-    if 'mitgcm' in pbs_script:
+    if 'mitgcm' in sbatch_script:
         jobname += 'o'
-    elif 'ua' in pbs_script:
+    elif 'ua' in sbatch_script:
         jobname += 'i'
-    elif 'coupler' in pbs_script:
+    elif 'coupler' in sbatch_script:
         jobname += 'c'
-    command += ' -N ' + jobname
+    command += ' -J ' + jobname
     if input_var is not None:
         # Add variable definitions
-        command += ' -v '
+        command += ' --export=ALL,'
         command += list_with_separator(input_var,',')
     if afterok is not None:
         command += ' -W depend=afterok:'
         command += list_with_separator(afterok,':')
     # Specify script
-    command += ' ' + pbs_script
-
+    command += ' ' + sbatch_script
+    
     # Call the command and capture the output
-    pbs_id = subprocess.check_output(command, shell=True)
-    # Now extract the digits from the PBS job ID and return as a string
+    sbatch_id = subprocess.check_output(command, shell=True, text=True)
+    # Now extract the digits from the SBATCH job ID and return as a string
     try:
-        return str(extract_first_int(pbs_id))
+        return str(extract_first_int(sbatch_id))
     except(ValueError):
         print('Error (submit_job): job did not submit properly')
-        print('Error message from qsub was:')
-        print(pbs_id)
+        print('Error message from sbatch was:')
+        print(sbatch_id)
         sys.exit()
 
         
@@ -422,12 +432,12 @@ def reset_finished_files (options):
 
 # Function to copy the Ua restart file when a simulation is being duplicated or cleaned.
 def copy_ua_restart (directory, restart_name):
-    orig_restart = raw_input('Enter path to desired Ua restart file, or press enter if you want Ua to start from scratch: ')
+    orig_restart = input('Enter path to desired Ua restart file, or press enter if you want Ua to start from scratch: ')
     if len(orig_restart) > 0:
         while True:
             if os.path.isfile(orig_restart):
                 break
-            orig_restart = raw_input('That file does not exist. Try again: ')
+            orig_restart = input('That file does not exist. Try again: ')
         shutil.copy(orig_restart, directory+restart_name)
                 
                 
